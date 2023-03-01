@@ -15,8 +15,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import numpy as np
-
+import sys
+sys.path.append(".")
 from aitviewer.configuration import CONFIG as C
+C.smplx_models = 'models/'
+
 from aitviewer.models.smpl import SMPLLayer
 from aitviewer.renderables.smpl import SMPLSequence
 from aitviewer.scene.camera import PinholeCamera
@@ -25,7 +28,7 @@ from aitviewer.viewer import Viewer
 
 if __name__ == "__main__":
     # Create a neutral SMPL T Pose.
-    smpl_template = SMPLSequence.t_pose(SMPLLayer(model_type="smpl", gender="neutral", device=C.device), name="SMPL")
+    smpl_template = SMPLSequence.t_pose(SMPLLayer(model_type="smpl", gender="male", device=C.device), name="SMPL")
 
     d = 10  # Distance from the object at start and end.
     r = 3  # Radius of the circle around the object.

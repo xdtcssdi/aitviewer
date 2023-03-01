@@ -15,7 +15,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import numpy as np
-
+import sys
+sys.path.append(".")
+from aitviewer.renderables.smpl import SMPLSequence
+from aitviewer.viewer import Viewer
+from aitviewer.configuration import CONFIG
+CONFIG.smplx_models = 'models/'
 from aitviewer.configuration import CONFIG as C
 from aitviewer.models.smpl import SMPLLayer
 from aitviewer.renderables.smpl import SMPLSequence
@@ -79,7 +84,7 @@ if __name__ == "__main__":
 
     # Create a neutral SMPL T Pose.
     # This also works with `smplh` or `smplx` model type (but there's no neutral model for SMPL-H).
-    smpl_layer = SMPLLayer(model_type="smpl", gender="neutral", device=C.device)
+    smpl_layer = SMPLLayer(model_type="smpl", gender="male", device=C.device)
     poses = np.zeros([1, smpl_layer.bm.NUM_BODY_JOINTS * 3])
     smpl_seq = SMPLSequence(poses, smpl_layer)
 

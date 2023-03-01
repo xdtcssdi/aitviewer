@@ -15,13 +15,16 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import trimesh
-
+import sys
+sys.path.append(".")
+from aitviewer.configuration import CONFIG
+CONFIG.smplx_models = 'models/'
 from aitviewer.renderables.meshes import Meshes
 from aitviewer.viewer import Viewer
 
 if __name__ == "__main__":
     # Load a simple untextured cube.
-    cube = trimesh.load("resources/cube.obj")
+    cube = trimesh.load("examples/resources/cube.obj")
     cube_mesh = Meshes(
         cube.vertices,
         cube.faces,
@@ -31,8 +34,8 @@ if __name__ == "__main__":
     )
 
     # Load a sphere with a texture.
-    planet = trimesh.load("resources/planet/planet.obj")
-    texture_image = "resources/planet/mars.png"
+    planet = trimesh.load("examples/resources/planet/planet.obj")
+    texture_image = "examples/resources/planet/mars.png"
     planet_mesh = Meshes(
         planet.vertices,
         planet.faces,
@@ -44,8 +47,8 @@ if __name__ == "__main__":
 
     # Load a high-res object with texture and scale it.
     # Drill object taken from https://github.com/mmatl/pyrender/tree/master/examples/models
-    drill = trimesh.load("resources/drill/drill.obj")
-    texture_image = "resources/drill/drill_uv.png"
+    drill = trimesh.load("examples/resources/drill/drill.obj")
+    texture_image = "examples/resources/drill/drill_uv.png"
     drill_mesh = Meshes(
         drill.vertices,
         drill.faces,

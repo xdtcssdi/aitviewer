@@ -14,9 +14,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+import sys
+sys.path.append(".")
 from aitviewer.renderables.smpl import SMPLSequence
 from aitviewer.viewer import Viewer
-
+from aitviewer.configuration import CONFIG
+CONFIG.smplx_models = 'models/'
 if __name__ == "__main__":
     v = Viewer()
     v.scene.add(SMPLSequence.t_pose())

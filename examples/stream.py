@@ -14,6 +14,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+import sys
+sys.path.append(".")
+from aitviewer.configuration import CONFIG
+CONFIG.smplx_models = 'models/'
 from aitviewer.streamables.webcam import Webcam
 from aitviewer.viewer import Viewer
 

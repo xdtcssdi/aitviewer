@@ -14,6 +14,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+import sys
+sys.path.append(".")
+from aitviewer.configuration import CONFIG
+CONFIG.smplx_models = 'models/'
 import numpy as np
 import trimesh
 
@@ -26,7 +30,7 @@ if __name__ == "__main__":
     N = 200
 
     # Load a simple untextured cube.
-    cube = trimesh.load("resources/cube.obj")
+    cube = trimesh.load("examples/resources/cube.obj")
 
     # Create sequences of position, scale and rotation values.
     p1 = np.linspace(np.array([0, 0, 0]), np.array([5, 0, 0]), num=N)
@@ -70,7 +74,7 @@ if __name__ == "__main__":
     # Here we create an array of vertices and vertex colors with shape (N, V, 3) and (N, V, 4) respectively.
 
     # Load a simple sphere.
-    sphere = trimesh.load("resources/planet/planet.obj")
+    sphere = trimesh.load("examples/resources/planet/planet.obj")
 
     # Create initial and final vertex positions.
     vertices_begin = sphere.vertices
