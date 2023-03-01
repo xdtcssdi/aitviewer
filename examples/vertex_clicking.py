@@ -19,9 +19,9 @@ import sys
 sys.path.append(".")
 from aitviewer.renderables.smpl import SMPLSequence
 from aitviewer.viewer import Viewer
-from aitviewer.configuration import CONFIG
-CONFIG.smplx_models = 'models/'
+
 from aitviewer.configuration import CONFIG as C
+C.smplx_models = 'models/'
 from aitviewer.models.smpl import SMPLLayer
 from aitviewer.renderables.smpl import SMPLSequence
 from aitviewer.renderables.spheres import Spheres
