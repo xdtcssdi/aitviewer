@@ -32,15 +32,16 @@ if __name__ == "__main__":
     v.run_animations = False
     pi = 3.1415926
     c = [149 / 255, 85 / 255, 149 / 255, 1]
+    c1 = [100 / 255, 255 / 255, 149 / 255, 1]
     start_degree = 0
     end_degree = 90
     frames_count = 7
     interval = (end_degree - start_degree) / frames_count
-    for i in range(frames_count):
-        c[-1] = 0.5 if i > 0 and i <frames_count-1 else 1
+    for i in range(frames_count+1):
+        c[-1] = 0.5 if i > 0 and i <frames_count else 1
 
         frame = np.zeros((1, 23*3))
-        frame[:, 0] = (start_degree + i * interval) * pi/ 180
+        frame[:, 17*3+2] = -(start_degree + i * interval) * pi/ 180
         seq_amass = SMPLSequence.pose(poses=frame,
             poses_root=np.zeros((1, 3)),
             color=tuple(c),
@@ -50,13 +51,13 @@ if __name__ == "__main__":
         v.scene.add(seq_amass)
 
 
-        c[-1] = 0.5 if i > 0 and i <frames_count-1 else 1
+        c1[-1] = 0.5 if i > 0 and i <frames_count else 1
 
         frame2 = np.zeros((1, 23*3))
-        frame2[:, 9] = (start_degree + i * interval) * pi/ 180
+        frame2[:, 15*3+2] = -(start_degree + i * interval) * pi/ 180
         seq_amass2 = SMPLSequence.pose(poses=frame2,
             poses_root=np.zeros((1, 3)),
-            color=tuple(c),
+            color=tuple(c1),
             # name="pose",
             show_joint_angles=True,
         )

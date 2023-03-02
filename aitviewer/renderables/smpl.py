@@ -195,11 +195,62 @@ class SMPLSequence(Node):
             color=kwargs.get("color", (160 / 255, 160 / 255, 160 / 255, 1.0)),
             name="Mesh",
         )
+
         self._add_node(self.mesh_seq)
 
         # Save view mode state to restore when exiting edit mode.
         self._view_mode_color = self.mesh_seq.color
         self._view_mode_joint_angles = self._show_joint_angles
+
+    @classmethod
+    def from_amass_dict(cls, body_data,
+                        smpl_layer=None,
+                        start_frame=None,
+                        end_frame=None,
+                        log=True,
+                        fps_out=None,
+                        z_up=True,
+                        **kwargs,):
+        if smpl_layer is None:
+            smpl_layer = SMPLLayer(model_type="smplh", gender=body_data["gender"].item(), device=C.device)
+
+        if log:
+            print("Data keys available: {}".format(list(body_data.keys())))
+            print("{:>6d} poses of size {:>4d}.".format(body_data["poses"].shape[0], body_data["poses"].shape[1]))
+            print("{:>6d} trans of size {:>4d}.".format(body_data["trans"].shape[0], body_data["trans"].shape[1]))
+            print("{:>6d} shape of size {:>4d}.".format(1, body_data["betas"].shape[0]))
+            print("Gender {}".format(body_data["gender"]))
+            print("FPS {}".format(body_data["mocap_framerate"]))
+
+        sf = start_frame or 0
+        ef = end_frame or body_data["poses"].shape[0]
+        poses = body_data["poses"][sf:ef]
+        trans = body_data["trans"][sf:ef]
+
+        if fps_out is not None:
+            fps_in = body_data["mocap_framerate"].tolist()
+            if fps_in != fps_out:
+                ps = np.reshape(poses, [poses.shape[0], -1, 3])
+                ps_new = resample_rotations(ps, fps_in, fps_out)
+                poses = np.reshape(ps_new, [-1, poses.shape[1]])
+                trans = resample_positions(trans, fps_in, fps_out)
+
+        i_root_end = 3
+        i_body_end = i_root_end + smpl_layer.bm.NUM_BODY_JOINTS * 3
+        i_left_hand_end = i_body_end + smpl_layer.bm.NUM_HAND_JOINTS * 3
+        i_right_hand_end = i_left_hand_end + smpl_layer.bm.NUM_HAND_JOINTS * 3
+
+        return cls(
+            poses_body=poses[:, i_root_end:i_body_end],
+            poses_root=poses[:, :i_root_end],
+            poses_left_hand=poses[:, i_body_end:i_left_hand_end],
+            poses_right_hand=poses[:, i_left_hand_end:i_right_hand_end],
+            smpl_layer=smpl_layer,
+            betas=body_data["betas"][np.newaxis],
+            trans=trans,
+            z_up=z_up,
+            **kwargs,
+        )
 
     @classmethod
     def from_amass(
